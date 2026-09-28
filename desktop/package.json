@@ -1,0 +1,91 @@
+{
+  "name": "dealfinder-desktop",
+  "productName": "DealFinder",
+  "version": "1.0.0",
+  "description": "Setup and connection settings for your DealFinder Notion workspace",
+  "author": "DealFinder",
+  "private": true,
+  "main": "main.cjs",
+  "scripts": {
+    "prepare-runtime": "node scripts/prepare-runtime.mjs",
+    "prestart": "npm run prepare-runtime",
+    "start": "electron .",
+    "prepack": "npm run prepare-runtime",
+    "pack": "electron-builder --dir",
+    "predist": "npm run prepare-runtime",
+    "dist": "electron-builder",
+    "test": "node --test test/*.test.mjs",
+    "test:ui": "node --test test/ui/*.test.mjs"
+  },
+  "build": {
+    "appId": "com.dealfinder.companion",
+    "productName": "DealFinder",
+    "icon": "assets/icon.png",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.cjs",
+      "preload.cjs",
+      "links.cjs",
+      "renderer/**",
+      "package.json"
+    ],
+    "extraResources": [
+      {
+        "from": "runtime",
+        "to": "runtime"
+      },
+      {
+        "from": "../agent",
+        "to": "agent",
+        "filter": [
+          "cli.mjs",
+          "desktop-worker.mjs",
+          "lib/**",
+          "package.json",
+          "!node_modules/**"
+        ]
+      },
+      {
+        "from": "../agent/node_modules",
+        "to": "agent/node_modules",
+        "filter": ["**/*", "!.cache/**"]
+      }
+    ],
+    "protocols": [
+      {
+        "name": "DealFinder Settings",
+        "schemes": [
+          "dealfinder"
+        ]
+      }
+    ],
+    "npmRebuild": false,
+    "beforePack": "scripts/before-pack.cjs",
+    "afterPack": "scripts/after-pack.cjs",
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        "dmg",
+        "zip"
+      ],
+      "hardenedRuntime": true
+    },
+    "win": {
+      "target": [
+        "nsis"
+      ]
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "electron": "44.4.5",
+    "electron-builder": "26.15.3"
+  }
+}

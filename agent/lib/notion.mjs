@@ -12,7 +12,7 @@ export class Notion {
   api(route, body, method = body === undefined ? 'GET' : 'POST') {
     return this.transport(`https://api.notion.com/v1/${route}`, {
       service: 'Notion', method, body, headers: { Authorization: `Bearer ${this.token}`, 'Notion-Version': '2026-03-11' },
-      retrySafe: method === 'GET' || method === 'PATCH' || route.endsWith('/query'),
+      retrySafe: method === 'GET' || (method === 'PATCH' && !/^blocks\/[^/]+\/children/.test(route)) || route.endsWith('/query'),
     });
   }
   async list(route, body) {
@@ -158,4 +158,83 @@ export async function provision(notion, config, controls, save) {
     await save(config);
   }
   await notion.verify();
+}
+
+export const settingsLink = 'dealfinder://settings';
+
+export function settingsEntryURL(value = process.env.DEALFINDER_LAUNCHER_URL) {
+  if (!value) return settingsLink;
+  const url = new URL(value);
+  if (url.protocol !== 'https:' || url.username || url.password || url.search || url.hash)
+    throw new Error('The settings launcher must use a public HTTPS URL without credentials, query, or fragment.');
+  return url.href;
+}
+
+export const sourcingGuideHeading = 'Turn sourcing on or off — no terminal needed';
+
+export function sourcingGuide(config) {
+  return [
+    block(sourcingGuideHeading, 'heading_2'),
+    block('First-time setup: install and open the DealFinder companion on your Mac or Windows computer, connect your accounts, and finish setup. The app installs background checks. You only need to do this once on that computer.'),
+    { object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: {
+      content: 'Open Sourcing Rules ↗', link: { url: `https://www.notion.so/${config.rulesPage.replaceAll('-', '')}` },
+    } }] } },
+    block('To turn sourcing ON', 'heading_3'),
+    block('1. In Sourcing Rules, replace the placeholder under Who to source with your targeting instructions: industries, locations, company size, and exclusions.'),
+    block('2. In the existing JSON controls block on that page, change "enabled": false to "enabled": true. Leave the other fields in place. This is the on/off switch; there is no separate Start button.'),
+    block('3. Set time (24-hour HH:MM), timezone, and dailyTarget in that same block. Keep exactly one JSON controls block. Notion saves your edits automatically.'),
+    block('4. Keep the agent’s computer signed in, awake, and online. It checks every 15 minutes and follows the daily schedule; turning it on is not an immediate Run now command. After a gap it may catch up one most-recent due day.'),
+    block('To pause sourcing', 'heading_3'),
+    block('Change "enabled": true back to "enabled": false in Sourcing Rules. This prevents new research from starting at the next check; a run already in progress is allowed to finish.'),
+    block('Where to see results', 'heading_3'),
+    block('Open Company Ideas for new company cards and Run History for progress, counts, and errors. Research uses your AI provider’s API and may incur charges.'),
+    block('If nothing starts', 'heading_3'),
+    block('Open DealFinder from Applications (Mac) or the Start menu (Windows), then choose Check connections. If background checks are missing or were stopped, choose Repair background checks. Confirm that Sourcing Rules is enabled and check Run History for today’s outcome; a completed daily quota will not run again that day.'),
+    block('You can close the companion window after setup. Use Notion for day-to-day start/pause, targeting, and schedule changes; use the companion for API keys, connection problems, and background scheduling.'),
+  ];
+}
+
+// Append instructions to older settings pages without replacing user notes or
+// touching controls. Reading blocks also reconciles a lost append response.
+export async function ensureSourcingGuide(notion, config) {
+  const children = await notion.list(`blocks/${config.settingsPage}/children`);
+  if (children.some(b => b.type === 'heading_2' &&
+    (b.heading_2.rich_text || []).map(t => t.plain_text ?? t.text?.content ?? '').join('') === sourcingGuideHeading)) return;
+  await notion.api(`blocks/${config.settingsPage}/children`, { children: sourcingGuide(config) }, 'PATCH');
+}
+
+// Separate from workspace provisioning so existing workspaces can add the
+// companion entry point without replacing rules, schedules, or review notes.
+export async function provisionSettings(notion, config, save) {
+  if (config.settingsPage) {
+    const page = await notion.api(`pages/${config.settingsPage}`);
+    if (!page.archived && !page.in_trash) { await ensureSourcingGuide(notion, config); return; }
+  }
+  const children = await notion.list(`blocks/${config.parentPage}/children`);
+  const matches = children.filter(b => b.type === 'child_page' && b.child_page.title === 'DealFinder Settings');
+  if (matches.length > 1) throw new Error('Multiple DealFinder Settings pages found. Keep one before running setup again.');
+  const entryURL = settingsEntryURL();
+  // Notion rejects custom app schemes in rich-text links. Use the HTTPS
+  // launcher when deployed; otherwise provide a working manual entry point.
+  const entryBlock = entryURL.startsWith('https:')
+    ? { object: 'block', type: 'paragraph', paragraph: { rich_text: [{ type: 'text', text: {
+      content: 'Open DealFinder Settings ↗', link: { url: entryURL },
+    } }] } }
+    : block('Open the DealFinder companion from Applications on Mac or the Start menu on Windows.');
+  config.settingsPage = matches[0]?.id || (await notion.api('pages', {
+    parent: { type: 'page_id', page_id: config.parentPage }, properties: { title: title('DealFinder Settings') },
+    children: [
+      block('DealFinder lives here in Notion. Use the companion app only to connect accounts and maintain the agent on your computer.'),
+      entryBlock,
+      block('Use the Mac or Windows computer where DealFinder is installed. The app includes a Back to Notion button. A clickable app launcher can be added here once the optional web launcher is hosted.'),
+      block('Everyday controls', 'heading_2'),
+      block('Edit targeting, the daily schedule, and enabled in Sourcing Rules. Review companies in Company Ideas and outcomes in Run History.'),
+      block('This computer runs the agent', 'heading_2'),
+      block('Closing the companion window does not stop scheduled sourcing. The computer must remain signed in, awake, and online. Background checks run every 15 minutes.'),
+      block('Credentials stay in your operating system’s credential store. Never paste API keys into this page.'),
+      ...sourcingGuide(config),
+    ],
+  })).id;
+  await save(config);
+  if (matches.length) await ensureSourcingGuide(notion, config);
 }

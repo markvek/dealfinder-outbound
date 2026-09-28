@@ -4,6 +4,23 @@ Run a daily company-sourcing agent on your Mac or Windows computer. Edit rules a
 
 ## Install
 
+### Desktop companion
+
+The companion app provides a visual setup wizard and a small status/settings screen. **Notion remains the main interface** for rules, schedules, company reviews, and run history.
+
+Install a DealFinder desktop build: on macOS, move **DealFinder.app** to Applications before opening it; on Windows, run the installer. The app bundles the agent and Node, so end users do not need Git, Node, or terminal commands. Builds are currently development artifacts; signed public releases are not published yet. See [desktop development and release instructions](desktop/README.md).
+
+1. Open DealFinder and enter the AI provider, model, and API key.
+2. Create/share a Notion connection as described below, then enter its token and your parent page link.
+3. Choose a starting time and timezone and click **Connect workspace**. Existing Notion rules and schedules are preserved.
+4. Click **Open Notion**, fill in Sourcing Rules, and enable sourcing when ready. New workspaces start paused.
+
+Setup adds **DealFinder Settings** beneath your Notion parent page, with start/pause instructions and guidance for opening the companion from Applications or the Start menu. Notion rejects direct `dealfinder://settings` links; a clickable **Open DealFinder Settings** link is included when a hosted HTTPS launcher is configured (see the desktop README). The app has **Back to Notion** and **Open Notion** buttons. This is a companion window, not a Notion embed.
+
+Existing CLI users can open the app with their existing profile and choose **Update Notion guide**, then **Repair background checks** to move scheduling to the bundled runner. Both interfaces use the same local configuration, credential store, and process lock. In the app you can update credentials, check connections, repair scheduling, or stop background checks. Closing the window leaves scheduled work running. Reconnecting an already-enabled workspace can resume paid sourcing.
+
+### Terminal installation (optional)
+
 First install **Git** and **Node.js 22.13 or newer** from [nodejs.org](https://nodejs.org/). Clone this repository into a permanent folder, then open a terminal there. The installer installs only the `agent` dependencies; the existing Next.js scaffold is not used by the agent.
 
 macOS:
@@ -28,13 +45,14 @@ The wizard asks for:
 
 Model availability differs by account. The wizard checks authenticated model access without generating text. Web-search support and billing access are checked by the first actual research request.
 
-Setup creates or reuses three named children beneath the parent page:
+Setup creates or reuses four named children beneath the parent page:
 
 | Page | Contents |
 | --- | --- |
 | Sourcing Rules | Editable instructions and a small JSON controls block |
 | Company Ideas | Company database with a **Company grid** gallery view |
 | Run History | Progress, daily counts, attempts, and error or shortfall explanations |
+| DealFinder Settings | Start/pause instructions, companion access, and connection troubleshooting |
 
 Select the Company grid tab in Company Ideas to see the cards. Each card includes its website, description, fit rationale, evidence links, date, and review status. Open it to add review notes. Status choices are New, Shortlisted, and Rejected.
 
@@ -53,7 +71,7 @@ The installer registers background checks, but **research starts paused**. Open 
 
 Describe industries, geography, size, buying signals, exclusions, and good/bad-fit examples in the text below the controls. Keep exactly one JSON code block. Child blocks on the page are read; linked pages, separate subpages, files and databases are not. Keep instructions under 20,000 characters. Use plain text for sourcing instructions; instructions inside images cannot be read.
 
-All routine operation stays in Notion: edit targeting and schedule, pause sourcing, review cards, and inspect runs. Initial setup, credential changes and machine maintenance use the local commands below.
+All routine operation stays in Notion: edit targeting and schedule, pause sourcing, review cards, and inspect runs. Initial setup, credential changes and machine maintenance use the companion app or the local commands below.
 
 ## Scheduling and recovery
 

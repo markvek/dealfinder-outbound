@@ -44,7 +44,7 @@ Register-ScheduledTask -TaskName '${TASK}' -Action $action -Trigger @($periodic,
 function supported() {
   if (!['darwin', 'win32'].includes(process.platform)) throw new Error('Native scheduling supports macOS and Windows only.');
 }
-export async function schedule(store) {
+export async function schedule(store, runtime = { node: process.execPath, cli }) {
   supported();
   await store.init();
   if (process.platform === 'darwin') {
@@ -53,12 +53,12 @@ export async function schedule(store) {
     await mkdir(dir, { recursive: true });
     const domain = `gui/${process.getuid()}`;
     try { await exec('launchctl', ['bootout', `${domain}/${LABEL}`]); } catch { /* First installation. */ }
-    await writeFile(file, launchAgent(process.execPath, cli, store.directory), { mode: 0o600 });
+    await writeFile(file, launchAgent(runtime.node, runtime.cli, store.directory), { mode: 0o600 });
     await exec('launchctl', ['bootstrap', domain, file]);
   } else {
     const launcher = store.file('scheduled-run.ps1');
     const installer = store.file('register-task.ps1');
-    await writeFile(launcher, '\ufeff' + windowsLauncher(process.execPath, cli, store.directory));
+    await writeFile(launcher, '\ufeff' + windowsLauncher(runtime.node, runtime.cli, store.directory));
     await writeFile(installer, '\ufeff' + windowsRegistration(launcher));
     await exec('powershell.exe', ['-NoProfile', '-NonInteractive', '-ExecutionPolicy', 'Bypass', '-File', installer]);
   }
