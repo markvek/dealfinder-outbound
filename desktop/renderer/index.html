@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+  <title>DealFinder Settings</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header><div class="brand"><span class="mark" aria-hidden="true">d.</span><span>DealFinder <small>COMPANION</small></span></div><button id="notion-link" class="quiet" hidden>Back to Notion ↗</button></header>
+  <main>
+    <div id="notice" role="status" aria-live="polite" hidden></div>
+    <section id="loading"><p class="eyebrow">YOUR NOTION COMPANION</p><h1>Getting things ready…</h1><p>Checking this computer’s connection.</p><button id="retry-load" hidden>Try again</button></section>
+    <section id="wizard" hidden>
+      <p class="eyebrow">A LITTLE SETUP. THEN BACK TO NOTION.</p>
+      <h1 id="wizard-title">Connect your workspace.</h1>
+      <p class="intro">Your companies, rules, and reviews live in Notion. This app takes care of the connections and background work.</p>
+      <ol class="steps" aria-label="Setup progress"><li>AI provider</li><li>Notion</li><li>Schedule</li></ol>
+      <form id="setup-form">
+        <fieldset data-step="0"><legend>Your research connection</legend>
+          <label for="provider">AI provider</label><select id="provider" name="provider"><option value="openai">OpenAI</option><option value="anthropic">Claude</option></select>
+          <div class="label-row"><label for="aiKey">API key</label><button type="button" id="provider-help" class="text-button">Get an API key ↗</button></div>
+          <input id="aiKey" name="aiKey" type="password" required autocomplete="off" spellcheck="false" maxlength="4096" placeholder="Paste your API key" aria-describedby="key-help">
+          <p class="hint" id="key-help">Stored in your computer’s credential store. API billing is separate from a chat subscription.</p>
+          <label for="model">Model ID</label><input id="model" name="model" required maxlength="200" pattern="[a-zA-Z0-9._:\-]+" spellcheck="false" placeholder="Enter a model that supports web search">
+          <p class="hint">Use the exact ID from your provider. Setup checks access without generating research.</p>
+        </fieldset>
+        <fieldset data-step="1" hidden><legend>Connect to Notion</legend>
+          <div class="instruction"><strong>First, give DealFinder access</strong><ol><li><button type="button" data-open="notion" class="text-button">Create a Notion connection ↗</button> with read, insert, and update content access.</li><li>Open your parent page in Notion. In its <strong>••• → Connections</strong> menu, add that connection.</li><li>Paste the connection token and the parent page link below.</li></ol></div>
+          <label for="notionKey">Notion connection token</label><input id="notionKey" name="notionKey" type="password" required autocomplete="off" spellcheck="false" maxlength="4096" placeholder="Paste your connection token">
+          <label for="parentPage">Parent page link</label><input id="parentPage" name="parentPage" required spellcheck="false" placeholder="https://www.notion.so/your-page">
+          <p class="hint">We’ll create or reuse Sourcing Rules, Company Ideas, Run History, and DealFinder Settings inside this page.</p>
+        </fieldset>
+        <fieldset data-step="2" hidden><legend>Make room for daily discovery</legend>
+          <label for="time">Daily start time</label><input id="time" name="time" type="time" required value="09:00">
+          <label for="timezone">Timezone</label><input id="timezone" name="timezone" required spellcheck="false" placeholder="America/New_York">
+          <p class="hint">For a new workspace. If you’re reconnecting, your existing Notion schedule stays in place.</p>
+          <div class="instruction"><strong>You decide when sourcing starts.</strong><p>New workspaces start paused. After setup, add your targeting rules in Notion and set <code>enabled</code> to <code>true</code>.</p><p>Background checks run every 15 minutes, even with this window closed. Keep this computer signed in, awake, and online.</p></div>
+          <p class="hint">Connecting saves credentials, prepares your Notion pages, and installs background checks. Connection checks don’t generate research. An existing enabled workspace may resume paid sourcing when background checks start.</p>
+        </fieldset>
+        <div class="form-actions"><button type="button" id="back" class="secondary" hidden>Back</button><button type="button" id="cancel" class="quiet" hidden>Return to status</button><button type="submit" id="next">Continue <span aria-hidden="true">→</span></button></div>
+      </form>
+    </section>
+    <section id="dashboard" hidden>
+      <p class="eyebrow">YOUR NOTION COMPANION</p><h1>Your workspace, connected.</h1><p class="intro">Everyday work happens in Notion. Come here when a connection needs attention.</p>
+      <div class="workspace-card"><div><span class="tag">NOTION WORKSPACE</span><h2>Ready for your next discovery.</h2><p>Edit sourcing rules, review company cards, and see run history.</p></div><button data-open="workspace">Open Notion ↗</button></div>
+      <dl class="status-grid"><div><dt>Research provider</dt><dd id="provider-status">—</dd></div><div><dt>Background checks</dt><dd id="schedule-status">—</dd></div><div><dt>Last local run</dt><dd id="run-status">—</dd></div><div><dt>Connection health</dt><dd id="health-status">Not checked this session</dd></div></dl>
+      <p class="hint">An installed background check does not mean sourcing is enabled. Your Sourcing Rules page in Notion controls pause and schedule.</p>
+      <div class="maintenance"><h2>Connection settings</h2><div class="button-row"><button id="check" class="secondary">Check connections</button><button id="reconnect" class="secondary">Update credentials</button><button id="repair" class="secondary">Repair background checks</button><button id="add-settings" class="secondary">Update Notion guide</button><button id="stop" class="quiet">Stop background checks</button><button id="refresh" class="quiet">Refresh status</button></div></div>
+      <p class="footnote">Closing this window leaves scheduled sourcing running. Your computer must remain signed in, awake, and online.</p>
+    </section>
+  </main>
+  <footer><span class="dot" aria-hidden="true"></span> Runs on your computer <span class="divider">/</span> Made for your Notion workspace</footer>
+  <script src="app.js"></script>
+</body>
+</html>

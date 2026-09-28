@@ -1,0 +1,43 @@
+name: Desktop companion
+on:
+  workflow_dispatch:
+  push:
+    paths: ['desktop/**', 'agent/**', '.github/workflows/desktop.yml']
+  pull_request:
+    paths: ['desktop/**', 'agent/**', '.github/workflows/desktop.yml']
+permissions:
+  contents: read
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, macos-15-intel, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: |
+            agent/package-lock.json
+            desktop/package-lock.json
+      - run: npm --prefix agent ci
+      - run: npm --prefix desktop ci
+      - run: npm --prefix agent test
+      - run: npm --prefix desktop test
+      - run: npx playwright install chromium
+        working-directory: desktop
+      - run: npm --prefix desktop run prepare-runtime
+      - run: npm --prefix desktop run test:ui
+      - run: npm --prefix desktop run dist -- --publish never
+        env:
+          CSC_IDENTITY_AUTO_DISCOVERY: 'false'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DealFinder-${{ matrix.os }}
+          path: |
+            desktop/dist/*.dmg
+            desktop/dist/*.zip
+            desktop/dist/*.exe
+          if-no-files-found: error
