@@ -1,0 +1,189 @@
+{
+  "searches": [
+    {
+      "id": "business-services",
+      "name": "Essential business services",
+      "description": "Recurring services embedded in everyday operations.",
+      "status": "active",
+      "employees": 50,
+      "revenue": 70,
+      "metric": "Revenue",
+      "geography": ["United States", "Canada"],
+      "categories": ["IT services"],
+      "exclusions": ["Consumer", "Pre-revenue"],
+      "sources": [
+        "Company websites",
+        "PE portfolios",
+        "Industry publications",
+        "Conference exhibitors"
+      ],
+      "domains": [],
+      "ownership": "Private / PE-backed",
+      "companyType": "B2B",
+      "dealSize": "Open",
+      "version": 1
+    },
+    {
+      "id": "logistics",
+      "name": "Logistics & supply chain",
+      "description": "Infrastructure for moving goods.",
+      "status": "past",
+      "employees": 50,
+      "revenue": 70,
+      "metric": "Revenue",
+      "geography": ["United States", "Canada"],
+      "categories": ["Logistics software"],
+      "exclusions": ["Consumer", "Pre-revenue"],
+      "sources": [
+        "Company websites",
+        "PE portfolios",
+        "Industry publications",
+        "Conference exhibitors"
+      ],
+      "domains": [],
+      "ownership": "Private / PE-backed",
+      "companyType": "B2B",
+      "dealSize": "Open",
+      "version": 1
+    }
+  ],
+  "companies": [
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Pass",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "northline",
+      "name": "Northline Systems",
+      "domain": "northline.example",
+      "initials": "N",
+      "color": "green",
+      "category": "Industrial software",
+      "employees": 210,
+      "revenue": 76,
+      "description": "Field service and dispatch infrastructure for commercial equipment maintenance teams.",
+      "customers": "Commercial HVAC and industrial maintenance operators. Dispatchers and technicians use the system throughout each workday.",
+      "criticality": "Coordinates technician dispatch, parts availability, and work-order billing. An outage would directly affect service delivery and cash collection.",
+      "concern": "Needs clearer evidence of retention and the proportion of revenue from recurring contracts.",
+      "evidence": [
+        {
+          "title": "Workflow overview",
+          "url": "",
+          "detail": "Sample evidence: dispatch, work orders, and invoicing in one operational workflow."
+        }
+      ]
+    },
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Uncertain",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "meridian",
+      "name": "MeridianOps",
+      "domain": "meridianops.example",
+      "initials": "m",
+      "color": "orange",
+      "category": "IT services",
+      "employees": 470,
+      "revenue": null,
+      "description": "Managed infrastructure and operational IT services for regulated industrial businesses.",
+      "customers": "Manufacturing groups and logistics businesses with multi-site infrastructure.",
+      "criticality": "Manages network availability and core business infrastructure, with embedded service teams and long-term support agreements.",
+      "concern": "Revenue is not available. Employee count suggests scale, but does not establish the revenue threshold.",
+      "evidence": [
+        {
+          "title": "Services overview",
+          "url": "",
+          "detail": "Sample evidence: managed infrastructure and operational continuity services."
+        }
+      ]
+    },
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Likely pass",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "clearpath",
+      "name": "Clearpath Industrial",
+      "domain": "clearpath.example",
+      "initials": "c",
+      "color": "purple",
+      "category": "Industrial software",
+      "employees": 180,
+      "revenue": 72,
+      "description": "Inventory and procurement software for industrial distributors.",
+      "customers": "Regional distributors and aftermarket parts suppliers.",
+      "criticality": "Connects stock availability, purchasing, and customer orders. Core to order fulfillment and working-capital management.",
+      "concern": "Revenue estimate is indicative and requires confirmation.",
+      "evidence": [
+        {
+          "title": "Platform overview",
+          "url": "",
+          "detail": "Sample evidence: inventory management and purchasing automation."
+        }
+      ]
+    },
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Pass",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "atlas",
+      "name": "Atlas Fleet",
+      "domain": "atlasfleet.example",
+      "initials": "A",
+      "color": "sand",
+      "category": "Industrial software",
+      "employees": 260,
+      "revenue": 91,
+      "decision": "priority",
+      "description": "Fleet maintenance software that keeps commercial vehicles on the road.",
+      "customers": "Commercial fleet operators with distributed maintenance teams.",
+      "criticality": "Powers maintenance scheduling, compliance records, and vehicle availability. Essential to keeping a working fleet operational.",
+      "concern": "Validate contract duration and expansion across customer locations.",
+      "evidence": [
+        {
+          "title": "Maintenance workflows",
+          "url": "",
+          "detail": "Sample evidence: scheduled maintenance, compliance, and asset availability."
+        }
+      ]
+    },
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Pass",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "relay",
+      "name": "Relay Systems",
+      "domain": "relaysystems.example",
+      "initials": "r",
+      "color": "pink",
+      "category": "Manufacturing software",
+      "employees": 150,
+      "revenue": 73,
+      "decision": "talking",
+      "description": "Quality management software for precision manufacturers.",
+      "customers": "Precision engineering and medical device manufacturers.",
+      "criticality": "Manages quality checks, non-conformances, and traceability required for releasing products.",
+      "concern": "Existing conversation underway; avoid duplicate outreach.",
+      "evidence": [
+        {
+          "title": "Quality overview",
+          "url": "",
+          "detail": "Sample evidence: product traceability and release management."
+        }
+      ]
+    }
+  ]
+}
