@@ -1,0 +1,21 @@
+{
+  "name": "dealfinder-local-agent",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "setup": "node cli.mjs setup",
+    "doctor": "node cli.mjs doctor",
+    "run": "node cli.mjs run",
+    "status": "node cli.mjs status",
+    "schedule": "node cli.mjs schedule",
+    "unschedule": "node cli.mjs unschedule",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "8.7.2",
+    "@napi-rs/keyring": "2.1.0",
+    "proper-lockfile": "4.1.2"
+  }
+}
