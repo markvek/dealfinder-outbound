@@ -2,25 +2,41 @@
   "name": "dealfinder-outbound",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@12.6.0",
   "scripts": {
-    "dev": "next dev",
+    "dev": "next dev --hostname 127.0.0.1 --port ${PORT:-${CONDUCTOR_PORT:-55210}}",
     "build": "next build",
-    "start": "next start",
-    "lint": "eslint"
+    "start": "next start --hostname 127.0.0.1",
+    "lint": "eslint",
+    "test": "tsx --test tests/*.test.ts",
+    "test:e2e": "playwright test",
+    "format": "prettier --write src tests docs *.ts *.mjs *.json",
+    "automation": "tsx --env-file-if-exists=.env.local scripts/automation.ts",
+    "scheduler": "npm run automation -- --scheduler-only",
+    "worker": "npm run automation -- --worker-only"
   },
   "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.1",
+    "better-sqlite3": "^13.0.3",
+    "cron-parser": "^5.10.1",
+    "lucide-react": "^1.48.0",
     "next": "16.3.6",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "zod": "^4.6.5"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "@tailwindcss/postcss": "^4",
+    "@types/better-sqlite3": "^9.6.0",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.3.6",
+    "prettier": "^3.9.9",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

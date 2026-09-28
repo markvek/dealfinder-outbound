@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "searches": [
+    {
+      "id": "industrial-software",
+      "name": "Industrial software",
+      "description": "Mission-critical software for the businesses that make, move, and maintain.",
+      "status": "active",
+      "employees": 50,
+      "revenue": 70,
+      "metric": "Revenue",
+      "geography": ["United States", "Canada"],
+      "categories": [
+        "Industrial software",
+        "Manufacturing software",
+        "IT services"
+      ],
+      "exclusions": ["Consumer", "Pre-revenue"],
+      "sources": [
+        "Company websites",
+        "PE portfolios",
+        "Industry publications",
+        "Conference exhibitors"
+      ],
+      "domains": [],
+      "ownership": "Private / PE-backed",
+      "companyType": "B2B",
+      "dealSize": "Open",
+      "version": 1,
+      "basePrompt": "Find companies matching the hard filters. Cite evidence for each claim and flag uncertain information.",
+      "researchAgentId": "",
+      "judgeAgentId": "",
+      "writerAgentId": ""
+    }
+  ],
+  "companies": [
+    {
+      "searchId": "industrial-software",
+      "geography": "United States",
+      "qualification": "Pass",
+      "memoVersion": 1,
+      "notes": "",
+      "sample": true,
+      "id": "forgeworks",
+      "name": "Forgeworks",
+      "domain": "forgeworks.example",
+      "initials": "fw",
+      "color": "blue",
+      "category": "Manufacturing software",
+      "employees": 320,
+      "revenue": 84,
+      "description": "Production planning and execution software for discrete manufacturers. Connects the factory floor to scheduling, inventory, and quality control.",
+      "customers": "Mid-market manufacturers in aerospace, automotive, and industrial equipment. Used daily by production planners and plant managers.",
+      "criticality": "Sits at the center of daily production: schedules work orders, tracks materials, and coordinates quality checks. A loss of access would interrupt scheduling and shop-floor execution.",
+      "concern": "Customer concentration and the mix of recurring software revenue versus implementation services need validation.",
+      "evidence": [
+        {
+          "title": "Product overview",
+          "url": "",
+          "detail": "Sample evidence: integrated production scheduling, inventory, and quality workflows."
+        },
+        {
+          "title": "Customer profile",
+          "url": "",
+          "detail": "Sample evidence: multi-site manufacturing deployments with daily operator usage."
+        }
+      ]
+    }
+  ],
+  "drafts": [],
+  "runs": [],
+  "history": [],
+  "settings": {
+    "workspace": "DealFinder",
+    "reviewer": "Local reviewer",
+    "sender": "",
+    "senderRole": "",
+    "thesis": "Investing in mission-critical businesses that power everyday operations.",
+    "style": "Direct, thoughtful, and concise. Be specific about the business. Avoid flattery and generic investment language.",
+    "examples": "",
+    "connection": {
+      "name": "Research connection",
+      "type": "mcp",
+      "endpoint": "",
+      "auth": "none"
+    },
+    "searches": {
+      "defaultEmployees": 50,
+      "defaultRevenue": 70,
+      "defaultMetric": "Revenue"
+    },
+    "companies": {
+      "freshnessDays": 30,
+      "showUncertain": true
+    },
+    "review": {
+      "defaultView": "pending",
+      "requireNotes": false
+    },
+    "outreach": {
+      "signoff": "Best,",
+      "subjectPrefix": ""
+    }
+  }
+}
